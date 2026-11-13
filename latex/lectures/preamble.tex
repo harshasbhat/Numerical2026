@@ -1,0 +1,148 @@
+% !TEX root = ../master.tex
+
+% =============================================================================
+% preamble.tex --- shared package loads and formatting for the Earthquake
+% Source Mechanics lecture notes. \input{} this from master.tex, after
+% \documentclass and before \begin{document}.
+% =============================================================================
+
+\usepackage{graphicx}
+\usepackage[a4paper,left=2cm,right=2cm, bottom=2.cm, top=2.0cm]{geometry}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathtools}   % extends amsmath: needed for psmallmatrix, etc.
+\usepackage{bm}
+\usepackage{longtable}
+\usepackage[margin=1pt,font=small,labelfont=bf]{caption}
+\usepackage[dvipsnames]{xcolor}
+\definecolor{citecolor}{RGB}{128,0,32}
+\usepackage[unicode,hyperfootnotes=false,breaklinks=true,colorlinks=true,allcolors=blue]{hyperref}
+\usepackage{setspace}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{etoolbox}
+\newcommand{\degree}{\ensuremath{^\circ}}
+
+\usepackage{times}      % or whatever Plex text variant you want
+
+
+\usepackage{tabularx}
+\usepackage{booktabs}   % needed for the elastic-constants tables in lecture01
+\usepackage{datetime}
+\usepackage{lineno}
+\usepackage{etoolbox}
+\usepackage[utf8]{inputenc}   % if not already present
+\usepackage[T1]{fontenc}      % this is the one that fixes your error
+\usepackage[french,english]{babel}    % english is last-loaded => main/document language;
+                                       % french stays available (e.g. via \foreignlanguage{french}{...})
+                                       % without which \guillemetleft would misbehave, per original note
+\usepackage[normalem]{ulem}  % normalem keeps \emph as italic, not underlined
+\usepackage{csquotes}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, angles, quotes, decorations.pathreplacing, positioning, calc, decorations.pathmorphing}
+\usepackage{enumitem}
+\setlist[itemize]{itemsep=0pt, topsep=2pt, parsep=0pt}
+
+\patchcmd{\linenumber}{\hb@xt@}{\hbox}{}{}
+
+\newdateformat{usvardate}{\shortmonthname[\THEMONTH]. \THEDAY, \THEYEAR}
+\newcommand{\lastmodified}{%
+  \textcolor{citecolor}{\scriptsize \usvardate\today{}}
+}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1em}
+\renewcommand{\headrulewidth}{0.0pt}
+\renewcommand{\footrulewidth}{0.0pt}
+%\setlength{\headheight}{15pt}
+\fancypagestyle{custom}
+{
+\fancyhead[L]{}
+\fancyhead[C]{}
+\fancyhead[R]{}
+\fancyfoot[L]{\textcolor{gray}{\bf DRAFT has errors}}
+\fancyfoot[C]{\textcolor{gray}{\thepage}}
+%\fancyfoot[R]{\lastmodified}
+\fancyfoot[R]{}
+\fancyfoot[L]{}
+}
+
+\renewcommand\thesection{\arabic{section}}
+\titlespacing\section{0pt}{12pt plus 4pt minus 2pt}{0pt plus 2pt minus 2pt}
+
+%-----------------------------------------------------------------------------
+% Table of contents: show \part and \section entries only (hide \subsection
+% and deeper), make the spacing between entries compact, indent the
+% \section entries under their \part entry, and drop the section numbers
+% from the TOC listing (the numbers/\ref's in the body text are untouched --
+% this only changes how entries are printed in the Contents list). The
+% \parskip leaking into the TOC's own paragraphs is neutralized locally
+% around the \tableofcontents call itself, in master.tex.
+%-----------------------------------------------------------------------------
+\setcounter{tocdepth}{1}
+
+\makeatletter
+\patchcmd{\l@part}{\addvspace{2.25em \@plus\p@}}{\addvspace{0.8em \@plus\p@}}{}{}
+
+\renewcommand*\l@section[2]{%
+  \ifnum \c@tocdepth >\z@
+    \addpenalty\@secpenalty
+    \addvspace{0.1em \@plus\p@}%
+    \begingroup
+      \renewcommand\numberline[1]{}%   % suppress the section number in the TOC
+      \parindent \z@ \leftskip 1.5em \rightskip \@pnumwidth
+      \parfillskip -\@pnumwidth
+      \leavevmode \small
+      #1\nobreak\hfil \nobreak\hb@xt@\@pnumwidth{\hss #2}\par
+    \endgroup
+  \fi}
+\makeatother
+%-----------------------------------------------------------------------------
+% Bibliography management
+%-----------------------------------------------------------------------------
+% JGR style citations
+\usepackage[
+  giveninits=true,
+  style=authoryear,
+  backend=bibtex,
+  maxcitenames=2,
+  maxbibnames=99,
+  hyperref=true,
+  backref=false,
+  sorting=nyt,
+  uniquename=init,
+  autolang=hyphen,
+  dashed=false]{biblatex}
+
+\AtEveryCite{\it \color{citecolor}}
+\AtEveryBibitem{\clearfield{month}}
+\setcounter{biburlnumpenalty}{100}
+\setcounter{biburlucpenalty}{100}
+\setcounter{biburllcpenalty}{100}
+\renewcommand*{\finalnamedelim}{\addspace\&\space}
+\AtEveryBibitem{\clearfield{issn}}
+\renewbibmacro{in:}{}
+\AtBeginDocument{%
+  \renewcommand*{\mkbibnamefamily}[1]{#1}%
+  \renewcommand*{\mkbibnamegiven}[1]{#1}%
+  \renewcommand*{\mkbibnameprefix}[1]{#1}%
+}
+
+\definecolor{darkgreen}{rgb}{0.15,0.55,0.35}
+\newcommand{\todo}[1]{\textcolor{darkgreen}{\textbf{[TODO: \uline{#1}]}}}
+\newenvironment{itemize*}%
+  {\begin{itemize}%
+    \setlength{\itemsep}{0pt}%
+    \setlength{\parskip}{0pt}}%
+  {\end{itemize}}
+
+%\linenumbers
+%-----------------------------------------------------------------------------
+% Line spacing
+\setstretch{1.05}
+%-----------------------------------------------------------------------------
+% Graphics and bibliography paths
+%-----------------------------------------------------------------------------
+\graphicspath{{./lectures/figures/}}
+\addbibresource{./lectures/MasterBibliography.bib}

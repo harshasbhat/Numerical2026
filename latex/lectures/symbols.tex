@@ -1,0 +1,28 @@
+% =============================================================================
+% symbols.tex --- custom macros and notation for the Earthquake Source
+% Mechanics lecture notes. \input{} this from master.tex, after preamble.tex
+% and before \begin{document}. Add new shared macros here (not in individual
+% lectureNN.tex files) so notation stays consistent across lectures.
+% =============================================================================
+
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\Vl}{V_{\mathrm{load}}}
+\newcommand{\Dc}{D_c}
+\newcommand{\order}[1]{\mathcal{O}\!\left(#1\right)}
+
+% --- Shared "Practice Problems" macros -------------------------------------
+% Used by every lectureNN.tex's end-of-lecture "Practice Problems: Numerical
+% Pitfalls" section. Defined once here (rather than locally in each
+% lectureNN.tex) because \newcommand is global: a second \newcommand for the
+% same name in a later \input'd lecture file is a fatal LaTeX error the
+% moment more than one lecture with practice problems is compiled together.
+\newcommand{\pitfall}[1]{\par\smallskip\noindent\textbf{Pitfall to notice:} #1\par\smallskip}
+\newcommand{\solution}{\par\smallskip\noindent\textbf{Solution.}\ }
+
+% --- Custom theorem-like environments ---------------------------------------
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
